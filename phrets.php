@@ -1417,6 +1417,9 @@ class phRETS {
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, 0);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 
+		curl_setopt($this->ch, CURLOPT_PROXY, 'localhost:9050');
+		curl_setopt($this->ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+
 		// make request to Login transaction
 		$result =  $this->RETSRequest($this->capability_url['Login']);
 		if (!$result) {

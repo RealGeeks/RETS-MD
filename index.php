@@ -70,11 +70,15 @@ function code_mddetails() {
 		// set things up
 		$rets = new phRETS;
 
+	    $rets->SetParam("debug_mode", true);
+	    $rets->SetParam("debug_file", '/tmp/rets_debug.txt');
+
 		$rets->AddHeader("Accept", "*/*");
 		$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 		$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
 
 		$rets->SetParam("compression_enabled", true);
+
 
 		if ($_SESSION['force_basic'] == "true") {
 			$rets->SetParam("force_basic_authentication", true);
@@ -261,6 +265,9 @@ function code_peek() {
 	// set things up
 	$rets = new phRETS;
 
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
+
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -441,6 +448,9 @@ function code_export() {
 	// set things up
 	$rets = new phRETS;
 
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
+
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -507,6 +517,9 @@ function code_objects() {
 
 	// set things up
 	$rets = new phRETS;
+
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
@@ -588,6 +601,9 @@ function code_lookup() {
 
 	// set things up
 	$rets = new phRETS;
+
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
@@ -681,6 +697,9 @@ function code_login() {
 	// set things up
 	$rets = new phRETS;
 
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
+
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_REQUEST['rets_version']}");
 	$rets->AddHeader("User-Agent", $_REQUEST['user_agent']);
@@ -758,6 +777,9 @@ function code_main() {
 	// set things up
 	$rets = new phRETS;
 
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
+
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -768,6 +790,9 @@ function code_main() {
 	if ($_SESSION['force_basic'] == "true") {
 	        $rets->SetParam("force_basic_authentication", true);
 	}
+
+	$rets->SetParam("debug_mode", true);
+	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	// make first connection
 	$connect = $rets->Connect($_SESSION['login_url'], $_SESSION['username'], $_SESSION['password'], $_SESSION['ua_pwd']);
