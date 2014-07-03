@@ -1,10 +1,11 @@
 RETS MD [RealGeeks Hacked Version]
 =======
 
-This is a hacked up version of RetsMD that does 2 things by default:
+This is a hacked up version of RetsMD that does 3 things by default:
 
 1. Logs every HTTP transaction to /tmp/rets_debug.txt
 2. Uses a SOCKS5 proxy located at localhost:9050
+3. Uses an updated version of phrets from [upstream master](https://github.com/troydavisson/PHRETS)
 
 In order to use it, you will need to set up an SSH tunnel:
 
