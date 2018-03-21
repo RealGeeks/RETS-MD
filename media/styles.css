@@ -57,14 +57,6 @@ a, a:link, a:hover, a:active, a:visited {
 #simplemodal-overlay {background-color:#000;}
 #simplemodal-container {background-color:white; border:8px solid #b3c0ff;}
 
-.extra {
-	display: none;
-}
-
-#extra-link {
-  font-size: 8pt;
-}
-
 #login-button {
 	margin-top: 10px;
 }

@@ -69,18 +69,6 @@ jQuery(document).ready(function() {
 		return false;
 	});
 
-	jQuery("#extra-link").live("click", function() {
-		jQuery(".extra").each(function() {
-			jQuery(this).show('slow');
-		});
-		jQuery(".extra-link-row").each(function() {
-			jQuery(this).hide();
-		});
-
-		return false;
-
-	});
-
 
 });
 
