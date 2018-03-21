@@ -6,6 +6,14 @@ ob_start("ob_gzhandler");
 $media_url = "media/";
 $path_to_me = $_SERVER['SCRIPT_NAME'];
 
+
+/* redirect to https */
+if(!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != "https"){
+    $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    header("HTTP/1.1 301 Moved Permanently");
+    header("Location: $redirect");
+}
+
 require "phrets.php";
 session_start();  // start session management
 
@@ -70,15 +78,11 @@ function code_mddetails() {
 		// set things up
 		$rets = new phRETS;
 
-	    $rets->SetParam("debug_mode", true);
-	    $rets->SetParam("debug_file", '/tmp/rets_debug.txt');
-
 		$rets->AddHeader("Accept", "*/*");
 		$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 		$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
 
 		$rets->SetParam("compression_enabled", true);
-
 
 		if ($_SESSION['force_basic'] == "true") {
 			$rets->SetParam("force_basic_authentication", true);
@@ -265,9 +269,6 @@ function code_peek() {
 	// set things up
 	$rets = new phRETS;
 
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
-
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -328,9 +329,11 @@ function code_peek() {
 <?php
 
 	$field_list = $rets->SearchGetFields($search);
-
+	$rets->FreeResult($search);
+	
 	$system_to_long = array();
 	$table_metadata = $rets->GetMetadataTable($_REQUEST['r_resource'], $_REQUEST['r_class']);
+	
 	foreach ($table_metadata as $fi) {
 		$system_to_long["{$fi['SystemName']}"] = $fi['LongName'];
 	}
@@ -448,9 +451,6 @@ function code_export() {
 	// set things up
 	$rets = new phRETS;
 
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
-
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -517,9 +517,6 @@ function code_objects() {
 
 	// set things up
 	$rets = new phRETS;
-
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
@@ -601,9 +598,6 @@ function code_lookup() {
 
 	// set things up
 	$rets = new phRETS;
-
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
@@ -697,9 +691,6 @@ function code_login() {
 	// set things up
 	$rets = new phRETS;
 
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
-
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_REQUEST['rets_version']}");
 	$rets->AddHeader("User-Agent", $_REQUEST['user_agent']);
@@ -777,9 +768,6 @@ function code_main() {
 	// set things up
 	$rets = new phRETS;
 
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
-
 	$rets->AddHeader("Accept", "*/*");
 	$rets->AddHeader("RETS-Version", "RETS/{$_SESSION['rets_version']}");
 	$rets->AddHeader("User-Agent", $_SESSION['user_agent']);
@@ -790,9 +778,6 @@ function code_main() {
 	if ($_SESSION['force_basic'] == "true") {
 	        $rets->SetParam("force_basic_authentication", true);
 	}
-
-	$rets->SetParam("debug_mode", true);
-	$rets->SetParam("debug_file", '/tmp/rets_debug.txt');
 
 	// make first connection
 	$connect = $rets->Connect($_SESSION['login_url'], $_SESSION['username'], $_SESSION['password'], $_SESSION['ua_pwd']);
@@ -1012,21 +997,16 @@ echo "
 			<tr><td width='25%'><b><label for='l-login_url'>Login URL:</label></b></td><td width='75%'><input type='text' id='l-login_url' name='login_url' size='65' value='{$login_url}'/></td></tr>
 			<tr><td><b><label for='l-username'>Username:</label></b></td><td><input type='text' id='l-username' name='username' size='15' value='{$username}'/></td></tr>
 			<tr><td><b><label for='l-password'>Password:</label></b></td><td><input type='password' id='l-password' name='password' size='15' value='{$password}'/></td></tr>
-			<tr class='extra-link-row'><td></td><td><a href='' id='extra-link'>Show More Options</a></td></tr>
-			<tr class='extra'><td><b><label for='l-user_agent'>User-Agent:</label></b></td><td><input type='text' id='l-user_agent' name='user_agent' size='20' value='{$user_agent}'/></td></tr>
-			<tr class='extra'><td><b><label for='l-ua_pwd'>User-Agent Password:</label></b></td><td><input type='password' id='l-ua_pwd' name='ua_pwd' size='15' value='{$ua_pwd}'/> <small>(Leave blank if you don't have one)</small></td></tr>
-			<tr class='extra'><td><b><label for='l-rets_version'>RETS Version:</label></b></td><td><select id='l-rets_version' name='rets_version'>{$version_options}</select></td></tr>
-			<tr class='extra'><td><b>Force Basic Auth.:</b></td><td><label for='force_basic_y'><input type='radio' name='force_basic' value='true' id='force_basic_y'/> Yes &nbsp;</label> &nbsp; <label for='force_basic_n'><input type='radio' name='force_basic' value='false' checked='checked' id='force_basic_n'/> No</label></td></tr>
+			<tr><td><b><label for='l-user_agent'>User-Agent:</label></b></td><td><input type='text' id='l-user_agent' name='user_agent' size='20' value='{$user_agent}'/></td></tr>
+			<tr><td><b><label for='l-ua_pwd'>User-Agent Password:</label></b></td><td><input type='password' id='l-ua_pwd' name='ua_pwd' size='15' value='{$ua_pwd}'/> <small>(Leave blank if you don't have one)</small></td></tr>
+			<tr><td><b><label for='l-rets_version'>RETS Version:</label></b></td><td><select id='l-rets_version' name='rets_version'>{$version_options}</select></td></tr>
+			<tr><td><b>Force Basic Auth.:</b></td><td><label for='force_basic_y'><input type='radio' name='force_basic' value='true' id='force_basic_y'/> Yes &nbsp;</label> &nbsp; <label for='force_basic_n'><input type='radio' name='force_basic' value='false' checked='checked' id='force_basic_n'/> No</label></td></tr>
 			<tr><td></td><td><input type='submit' value='    Login    ' id='login-button' /></td></tr>
 		</table>
 		</form>
 	</div>
 
 </div>
-
-<p style='text-align: center'><a href='{$GLOBALS['path_to_me']}?load=demo'>Try the demo</a></p>\n
-
-<a href='http://github.com/troydavisson/RETS-MD'><img style='position: absolute; top: 0; right: 0; border: 0;' src='https://a248.e.akamai.net/assets.github.com/img/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67' alt='Fork me on GitHub'></a>
 
 ";
 
@@ -1052,7 +1032,7 @@ $page_title = (empty($page_title)) ? "Main" : $page_title;
 <title>RETS M.D. - <?php echo $page_title; ?></title>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
 <link href="<?php echo $GLOBALS['media_url']; ?>styles.css?3" rel="stylesheet" type="text/css" />
-<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
 <script type="text/javascript">
 jQuery.noConflict();
 </script>
