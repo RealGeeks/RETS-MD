@@ -7,11 +7,13 @@ $media_url = "media/";
 $path_to_me = $_SERVER['SCRIPT_NAME'];
 
 
-/* redirect to https */
-if(!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != "https"){
+if (!$_ENV["DEV"]) {
+  /* redirect to https */
+  if(!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != "https"){
     $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     header("HTTP/1.1 301 Moved Permanently");
     header("Location: $redirect");
+  }
 }
 
 require "phrets.php";
