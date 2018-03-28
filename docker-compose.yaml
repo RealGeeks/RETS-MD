@@ -1,17 +1,16 @@
-version: "3"
+version: '3'
 
 services:
-  rets-md:
-    build: .
-    volumes:
-      - .:/code
-    environment:
-      DEV: "true"
   nginx:
-    image: nginx:1.13-alpine
+    image: nginx:latest
     ports:
       - "8080:80"
     volumes:
-      - ../aws_server_config/rets-md/proxy/conf/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - rets-md
+      - .:/code
+      - ../aws_server_config/retsmd/proxy/conf/nginx.conf:/etc/nginx/conf.d/default.conf
+  retsmd:
+    image: php:7-fpm-alpine3.7
+    environment:
+      DEV: "1"
+    volumes:
+      - .:/code

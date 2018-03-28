@@ -7,7 +7,7 @@ $media_url = "media/";
 $path_to_me = $_SERVER['SCRIPT_NAME'];
 
 
-if (!$_ENV["DEV"]) {
+if (!$_ENV["DEV"] == "1") {
   /* redirect to https */
   if(!isset($_SERVER['HTTP_X_FORWARDED_PROTO']) || $_SERVER['HTTP_X_FORWARDED_PROTO'] != "https"){
     $redirect = "https://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
