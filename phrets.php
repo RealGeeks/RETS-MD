@@ -1424,8 +1424,10 @@ class phRETS {
 		curl_setopt($this->ch, CURLOPT_TIMEOUT, 0);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 
-                // Use our proxy
-                curl_setopt($this->ch, CURLOPT_PROXY, '98.129.6.188:3128');
+		if($_ENV["PROXY_ADDR"]) {
+			// Use our proxy
+			curl_setopt($this->ch, CURLOPT_PROXY, $_ENV['PROXY_ADDR']);
+		}
 
 		// make request to Login transaction
 		$result =  $this->RETSRequest($this->capability_url['Login']);
